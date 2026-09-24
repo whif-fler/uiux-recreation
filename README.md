@@ -9,14 +9,14 @@ mobile.
 
 ## Live Demo
 
-[Home](https://uiux-recreation.vercel.app/)
-  -[Ride-Share Trip Details](https://uiux-recreation.vercel.app/ride-trip-details)
-  -[Art Showcase](https://uiux-recreation.vercel.app/art-showcase)
-  -[Travel App](https://uiux-recreation.vercel.app/travel-landing)
-  -[Finance Dashboard](https://uiux-recreation.vercel.app/finance-landing)
-  -[Real Estate Investment](https://uiux-recreation.vercel.app/real-estate-landing)
-  -[Pricing Plans](https://uiux-recreation.vercel.app/pricing-plans)
-  -[Developer Portfolio](https://uiux-recreation.vercel.app/developer-portfolio)
+- [Home](https://uiux-recreation.vercel.app/)
+- [Ride-Share Trip Details](https://uiux-recreation.vercel.app/ride-trip-details)
+- [Art Showcase](https://uiux-recreation.vercel.app/art-showcase)
+- [Travel App](https://uiux-recreation.vercel.app/travel-landing)
+- [Finance Dashboard](https://uiux-recreation.vercel.app/finance-landing)
+- [Real Estate Investment](https://uiux-recreation.vercel.app/real-estate-landing)
+- [Pricing Plans](https://uiux-recreation.vercel.app/pricing-plans)
+- [Developer Portfolio](https://uiux-recreation.vercel.app/developer-portfolio)
 
 ## Tech stack
 
