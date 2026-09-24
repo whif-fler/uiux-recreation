@@ -2,12 +2,19 @@ import { Phone } from "lucide-react";
 
 /**
  * Bottom action bar: compact stadium Call button + flexible dark Join Ride
- * pill, then the iOS home indicator. Sits below the scrollable content so
- * the leftover slack matches the reference's pre-button gap.
+ * pill, then slack so the row keeps its audited position. Sits below the
+ * scrollable content so the leftover slack matches the reference's
+ * pre-button gap.
+ *
+ * The iOS home indicator (the "gesture bar") was removed at the user's
+ * request, and the band below the row was then tightened from 45px to 18px
+ * (the user: "the bottom gap looks too big"). That left no room under the row
+ * for the floating BackToHome circle, so on this route's mobile view it is
+ * lifted above the row instead (see page.tsx: `max-md:bottom-[72px]`).
  */
 export function BottomActions() {
   return (
-    <div className="shrink-0 px-4">
+    <div className="shrink-0 px-4 pb-[18px]">
       <div className="flex gap-[10px]">
         <button
           type="button"
@@ -28,9 +35,6 @@ export function BottomActions() {
         >
           Join Ride
         </button>
-      </div>
-      <div className="mb-[6px] mt-[35px] flex justify-center">
-        <span aria-hidden="true" className="h-[4px] w-[93px] rounded-full bg-[#DDDDDD]" />
       </div>
     </div>
   );

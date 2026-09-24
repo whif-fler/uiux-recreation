@@ -47,7 +47,18 @@ Route: `/ride-trip-details`
 Units are mixed historically; each line states its unit below. "img" = image
 px @ 1200×1499 (CSS→image ×1.4452); unmarked sizes are CSS px as coded.
 
-- Status bar (CSS): h 52, pl 41, pr 34; time 17/600; icon widths 19/17/27.
+- Status bar: **REMOVED at the user's request** ("useless") together with
+  `_components/status-bar.tsx` and the Signal/Wifi/Battery glyphs in
+  `brand-marks.tsx`. The band it occupied was then **tightened 52px → 20px**
+  (user: "the top looks too big") as `pt-[20px]` on the header wrapper in
+  `ride-screen.tsx`, so the header, the scroll area and everything below move
+  up 32px. **20px is close to the floor: ~11px** — the brand mark (`pl-4`,
+  `pt-10`, so its top-left is at x16 / pad+10) must stay inside the panel's
+  63px top-left arc or `overflow-hidden` clips it
+  (`boundary x = 63 − √(63² − (63−y)²) ≤ 16` needs `y ≥ 21`, i.e. pad ≥ 11;
+  at 20px the mark clears the arc by 6.7px). Do not restore the status bar or
+  drop the pad below ~11px without user approval — the page spec already
+  classed the status bar as OS chrome, "not part of app".
 - Header: original placeholder brand mark 32×33 (`BrandMark` — abstract
   hop-trajectory glyph that replaces the reference's logo; never copy or
   trace the original); "HoᵖOn" Poppins 700 26px with `scaleX(0.9)`;
@@ -77,9 +88,31 @@ px @ 1200×1499 (CSS→image ×1.4452); unmarked sizes are CSS px as coded.
   11.5/14.5 `#737373`, max-w 210, wraps to 2 lines; Set pill w 84, h 40,
   bg `#F0F0F0` (reference 121×57 img — exact match).
 - Bottom: call pill w 63, h 46, gap 10, Join Ride flex-1, h 46, bg
-  `#3E3E3E`; buttons row y1230..1296 img (reference: call gray x17..108,
-  gap white x109..123, join x124..537 — re-verified ±2 img); home
-  indicator w 93, h 4, `#DDD`, y ≈ 1349.
+  `#3E3E3E`; horizontal geometry unchanged (reference: call gray x17..108,
+  gap white x109..123, join x124..537 — re-verified ±2 img). The home
+  indicator (gesture bar, w 93 h 4 `#DDD` y ≈ 1349 in the reference) is
+  **REMOVED at the user's request**, and the band below the row was then
+  **tightened 45px → 18px** (user: "the bottom gap looks too big") as
+  `pb-[18px]` in `bottom-actions.tsx`. Consequences, all intended:
+  (a) the row now ends 18px above the panel's bottom edge instead of 45 — it
+  sits 27 CSS px lower than the reference's y1230..1296 placement, which the
+  user's request supersedes; (b) `BackToHome` has nowhere free at the bottom
+  (the row and the content column are both full-width — floating it above the
+  row was tried and rejected because it grazed the reminder card), so
+  `page.tsx` passes `max-md:left-auto max-md:right-[70px] max-md:bottom-auto
+  max-md:top-[30.5px]` to put it **in the header row** on mobile — 18px left
+  of the close X and vertically centred on the row's 33px content band (20 +
+  10 + (33−32)/2 → centre y 46.5, the X's centre line; the earlier `top-2`
+  sat ~22px above it and looked detached — user: "put it right at the side of
+  X ... in the same line"). Both offsets track the header geometry: recheck
+  them if `pt-[20px]`, the row `pt-[10px]` or the mark height changes.
+  Verified clear of the X, the wordmark, the stepper and the 63px corner arc
+  from 360 → 767px; md+ unchanged — grey canvas outside the panel, shared
+  bottom-left position; (c) with the top pad
+  at 20px too, `main` gets 59px more height, which is what stopped it
+  scrolling at 360×800 (613px of content vs 585px available before → 644px
+  available now). Do not restore the indicator, the 45px or the old pad
+  without user approval.
 
 ## Known accepted deltas (do not "fix" without re-measuring)
 

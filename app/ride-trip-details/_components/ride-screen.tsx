@@ -7,7 +7,6 @@ import { DriverCard, VerificationBadges } from "./driver-card";
 import { inter } from "./fonts";
 import { FareSplitCard } from "./fare-split-card";
 import { ReminderRow } from "./reminder-row";
-import { StatusBar } from "./status-bar";
 import { TripTimeline } from "./trip-timeline";
 
 /**
@@ -52,8 +51,14 @@ export function RideScreen() {
       >
         <h1 className="sr-only">Ride-Share Trip Details</h1>
 
-        <motion.div variants={section} className="shrink-0">
-          <StatusBar />
+        {/* The iOS status bar (9:41 + signal/wifi/battery) was removed at the
+            user's request — the page spec already classed it as OS chrome
+            ("not part of app"), and its 52px band read as dead space. 20px is
+            the tightened top pad: the floor is ~11px, because the brand mark
+            (pl-4, pt-10 → content top at pad+10, left edge x16) must stay
+            inside the panel's 63px top-left arc or `overflow-hidden` clips it
+            (boundary x = 63 − √(63² − (63−y)²) ≤ 16 needs y ≥ 21). */}
+        <motion.div variants={section} className="shrink-0 pt-[20px]">
           <AppHeader />
         </motion.div>
 
