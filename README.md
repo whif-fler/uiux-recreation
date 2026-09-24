@@ -7,13 +7,24 @@ high visual fidelity and pixel-consistent recreation, not redesign.
 Each screen is its own route on one deployment, implemented for desktop and
 mobile.
 
+## Live Demo
+
+[Home](https://uiux-recreation.vercel.app/)
+  -[Ride-Share Trip Details](https://uiux-recreation.vercel.app/ride-trip-details)
+  -[Art Showcase](https://uiux-recreation.vercel.app/art-showcase)
+  -[Travel App](https://uiux-recreation.vercel.app/travel-landing)
+  -[Finance Dashboard](https://uiux-recreation.vercel.app/finance-landing)
+  -[Real Estate Investment](https://uiux-recreation.vercel.app/real-estate-landing)
+  -[Pricing Plans](https://uiux-recreation.vercel.app/pricing-plans)
+  -[Developer Portfolio](https://uiux-recreation.vercel.app/developer-portfolio)
+
 ## Tech stack
 
-- [Next.js](https://nextjs.org/) (App Router) with TypeScript (strict mode)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Framer Motion](https://www.framer.com/motion/)
-- [Lucide React](https://lucide.dev/) for icons
-- ESLint (`eslint-config-next`)
+- Next.js
+- Tailwind CSS
+- Framer Motion
+- Lucide React
+- ESLint
 
 ## Routes
 
