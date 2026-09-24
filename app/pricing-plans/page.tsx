@@ -1,18 +1,17 @@
 import type { Metadata } from "next";
 import { BackToHome } from "@/components/shared/back-to-home";
+import { PricingScreen } from "./_components/pricing-screen";
 
 export const metadata: Metadata = {
   title: "Pricing Plans",
-  description: "Placeholder for the pricing plans page.",
+  description:
+    "Pricing plans with mixed-weight headline, app icons, gradient toggle and Free/Personal plan cards.",
 };
 
 export default function PricingPlansPage() {
   return (
     <>
-      <main className="p-8">
-        <h1>Pricing Plans</h1>
-        <p>Implementation pending.</p>
-      </main>
+      <PricingScreen />
       <BackToHome />
     </>
   );
