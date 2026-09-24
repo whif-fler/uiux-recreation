@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capsule — Place for your tickets, booking and documents</title>
+
+<!--
+  Font choice: The reference uses a rounded geometric sans (thick, soft
+  terminals, friendly proportions) for both the display headline and the
+  UI text. "Poppins" is used as the closest widely-available Google Fonts
+  match to that rounded-geometric character.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="sky">
+    <!-- soft cloud texture, purely decorative -->
+    <div class="clouds" aria-hidden="true"></div>
+
+    <div class="content">
+
+      <!-- ===== Header ===== -->
+      <header class="site-header">
+        <div class="nav-pill">
+          <a class="logo" href="#">
+            <svg class="logo-mark" width="22" height="22" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="10" cy="14" r="8" fill="#ffffff"/>
+              <circle cx="19" cy="14" r="8" fill="#ffffff" fill-opacity="0.55"/>
+            </svg>
+            <span class="logo-text">Capsule</span>
+          </a>
+
+          <nav class="site-nav">
+            <a href="#">Pricing</a>
+            <a href="#" class="nav-dropdown">Company
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+            <a href="#" class="nav-dropdown">Help
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </nav>
+
+          <a class="login-btn" href="#">Log in</a>
+        </div>
+      </header>
+
+      <!-- ===== Hero ===== -->
+      <main class="hero">
+        <h1 class="hero-heading">
+          <span class="line">Place for your</span>
+          <span class="line">tickets, booking</span>
+          <span class="line line-fade">and documents</span>
+        </h1>
+
+        <div class="cards-fan">
+
+          <!-- left card -->
+          <div class="card card-a">
+            <p class="card-a-text">Manage your flights,
+              <svg class="inline-icon" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M2 16l20-8-8 20-3-8-9-4z"/></svg>
+              bookings and documents directly in one app
+              <svg class="inline-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="2" width="12" height="20" rx="2"/><line x1="10" y1="19" x2="14" y2="19"/></svg>
+            </p>
+            <button class="card-btn">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+              Add your stuff
+            </button>
+          </div>
+
+          <!-- middle stack: back ticket + front ticket -->
+          <div class="card card-b-back">
+            <span class="flag-emoji" aria-hidden="true">🇳🇴</span>
+            <span class="ticket-label">Norway</span>
+            <span class="ticket-days">12 D...</span>
+            <span class="ticket-date">Thu, 5 De...</span>
+          </div>
+
+          <div class="card card-b-front">
+            <div class="ticket-top">
+              <span class="flag-emoji flag-emoji-dark" aria-hidden="true">🇺🇸</span>
+              <div class="ticket-code">
+                <span>WE1786</span>
+                <span class="ticket-code-sub">#WE975333</span>
+              </div>
+            </div>
+            <span class="ticket-country">USA</span>
+            <span class="ticket-days-big">25 Days</span>
+            <div class="ticket-bottom">
+              <span class="ticket-date">Fri, 18 Dec</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M2 16l20-8-8 20-3-8-9-4z"/></svg>
+            </div>
+          </div>
+
+          <!-- right card -->
+          <div class="card card-c">
+            <div class="route-row">
+              <span class="route-city">New Jersey</span>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="8 7 17 7 17 16"/></svg>
+            </div>
+            <span class="route-time">5:23pm</span>
+
+            <span class="route-time route-time-muted">8:43pm</span>
+            <div class="route-row">
+              <span class="route-city">California</span>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="7" y1="7" x2="17" y2="17"/><polyline points="16 17 7 17 7 8"/></svg>
+            </div>
+
+            <button class="card-btn">Check it live</button>
+          </div>
+
+        </div>
+
+        <p class="hero-subtext">
+          Everything related to travelling<br>
+          stored in one place. Never<br>
+          forget anything important.
+        </p>
+
+        <a class="btn-download" href="#">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16.365 1.43c0 1.14-.462 2.27-1.157 3.08-.78.9-2.05 1.6-3.06 1.6-.13 0-.24-.02-.28-.03-.02-.08-.04-.24-.04-.4 0-1.1.5-2.24 1.22-3.02.77-.85 2.13-1.55 3.19-1.6.02.13.03.26.03.37zM20.8 17.2c-.5 1.1-.74 1.6-1.38 2.57-.9 1.35-2.16 3.03-3.72 3.04-1.39.01-1.75-.9-3.64-.89-1.88.01-2.28.9-3.68.89-1.56-.02-2.75-1.53-3.65-2.88-2.5-3.75-2.76-8.15-1.22-10.5.96-1.48 2.63-2.42 4.19-2.42 1.6 0 2.6.9 3.92.9 1.28 0 2.06-.9 3.9-.9 1.15 0 2.66.57 3.63 1.71-1.6.95-2.26 2.65-2.29 4.35-.03 2.02 1.18 3.5 1.94 4.13z"/></svg>
+          Download for IOS
+        </a>
+      </main>
+
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,172 @@
+:root {
+  --page: #f1f1f1;
+  --card: #fbfbfb;
+  --ink: #050505;
+  --muted: #9c9c9c;
+  --copy: #717171;
+  --hairline: #e6e6e6;
+}
+
+* { box-sizing: border-box; }
+html { background: var(--page); }
+body {
+  margin: 0;
+  min-width: 320px;
+  color: var(--ink);
+  background: var(--page);
+  font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+.site-header { height: 108px; position: relative; }
+.schedule-link {
+  position: absolute;
+  top: 67px;
+  right: 80px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #767676;
+  font-size: 16px;
+  line-height: 1;
+  text-decoration: none;
+  letter-spacing: -0.45px;
+}
+.schedule-link strong { color: #111; font-weight: 500; }
+.schedule-link svg { width: 31px; height: 12px; overflow: visible; }
+.schedule-link path { fill: none; stroke: #111; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
+
+.hero { margin-left: 107px; width: 790px; }
+.eyebrow {
+  display: inline-block;
+  margin-bottom: 32px;
+  padding: 1px 3px 0;
+  border: 1px solid #7e7e7e;
+  color: #151515;
+  font-size: 10px;
+  line-height: 12px;
+  letter-spacing: -0.2px;
+}
+h1 {
+  margin: 0;
+  color: var(--muted);
+  font-size: 57px;
+  font-weight: 400;
+  line-height: 1.17;
+  letter-spacing: -3.35px;
+}
+h1 .line { display: block; white-space: nowrap; }
+h1 strong { color: #050505; font-weight: 600; }
+.line-two { display: flex !important; align-items: center; gap: 13px; }
+.line-four { display: flex !important; align-items: center; gap: 16px; margin-top: 3px; }
+
+.tool-stack { display: inline-flex; align-items: center; position: relative; width: 161px; height: 58px; margin-left: 2px; }
+.tool {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 15px;
+  background: #fff;
+  box-shadow: 0 10px 19px rgba(0,0,0,.12), 0 2px 5px rgba(0,0,0,.08);
+}
+.tool-dribbble { left: 0; top: 4px; transform: rotate(-8deg); }
+.tool-dribbble svg { width: 41px; height: 41px; }
+.tool-dribbble circle { fill: #e64588; stroke: #b12064; stroke-width: 1.6; }
+.tool-dribbble path { fill: none; stroke: #a91f5d; stroke-width: 1.4; }
+.tool-be { left: 51px; top: 0; transform: rotate(11deg); color: #247fc3; font-size: 25px; font-weight: 700; letter-spacing: -2px; }
+.tool-mark { left: 102px; top: 3px; transform: rotate(-11deg); }
+.tool-mark svg { width: 35px; height: 30px; }
+.tool-mark path { fill: #050505; }
+
+.toggle-art {
+  position: relative;
+  display: inline-block;
+  flex: 0 0 105px;
+  width: 105px;
+  height: 52px;
+  border-radius: 30px;
+  background: linear-gradient(105deg,#5ab7f7 3%,#a95df4 52%,#ff78a0 100%);
+  box-shadow: 0 14px 19px rgba(185,84,186,.18);
+}
+.toggle-art::before { content:"="; position:absolute; left:25px; top:7px; color:#785bd9; font-size:24px; line-height:34px; opacity:.6; letter-spacing:0; }
+.toggle-art i { position: absolute; right: 7px; top: 6px; width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(145deg,#fff,#f6e7ee); box-shadow: 0 4px 9px rgba(0,0,0,.25); }
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 18px;
+  margin: 75px 51px 0;
+}
+.plan-card {
+  min-height: 400px;
+  padding: 25px 23px 28px;
+  border-radius: 25px 25px 0 0;
+  background: rgba(255,255,255,.78);
+}
+.plan-heading { display: flex; align-items: center; min-height: 77px; }
+.plan-icon {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin-right: 30px;
+  border: 1px solid #ececec;
+  border-radius: 19px;
+  background: rgba(255,255,255,.78);
+  box-shadow: 0 16px 17px rgba(0,0,0,.1);
+}
+.plan-icon svg { width: 54px; height: 54px; border-radius: 15px; background: linear-gradient(145deg,#4b4b4b,#080808); box-shadow: inset 0 1px 3px rgba(255,255,255,.34), 0 5px 10px rgba(0,0,0,.25); }
+.plan-icon path { fill: #f3f3f3; }
+.plan-icon circle { fill: #090909; }
+.plan-icon svg path:nth-of-type(2) { fill: none; stroke: #0a0a0a; stroke-width: 1.5; }
+.plan-heading h2 { margin: 0; font-size: 29px; line-height: 1; font-weight: 600; letter-spacing: -1.25px; }
+.price { margin: 1px 2px 0 auto; font-size: 27px; line-height: 1; letter-spacing: -1.45px; white-space: nowrap; }
+.price strong { font-weight: 500; }
+.price span { color: #777; font-weight: 400; }
+.plan-button {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 73px;
+  margin-top: 22px;
+  border: 1px solid var(--hairline);
+  border-radius: 18px;
+  color: #888;
+  font-size: 16px;
+  text-decoration: none;
+  letter-spacing: -.45px;
+}
+.plan-button strong { color: #222; font-weight: 500; }
+.features { margin: 21px 0 0 12px; padding: 0; list-style: none; color: #777; font-size: 14px; letter-spacing: -.25px; }
+.features li { position: relative; margin: 0 0 17px 25px; }
+.features li::before { content: "✓"; position: absolute; left: -25px; top: -2px; color: #080808; font-size: 17px; }
+.visually-hidden { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+
+@media (max-width: 780px) {
+  .site-header { height: 82px; }
+  .schedule-link { top: 31px; right: 24px; }
+  .hero { margin-left: 24px; width: calc(100% - 48px); }
+  .eyebrow { margin-bottom: 24px; }
+  h1 { font-size: clamp(37px,8.7vw,57px); line-height: 1.14; letter-spacing: -.065em; }
+  h1 .line { white-space: normal; }
+  .line-two, .line-four { flex-wrap: wrap; gap: 10px; }
+  .tool-stack { transform: scale(.82); transform-origin: left center; margin-right: -25px; }
+  .toggle-art { transform: scale(.84); transform-origin: left center; margin-right: -13px; }
+  .pricing-grid { grid-template-columns: 1fr; margin: 60px 16px 0; }
+  .plan-card { border-radius: 25px; }
+}
+
+@media (max-width: 460px) {
+  .schedule-link span { font-size: 14px; }
+  h1 { font-size: 39px; }
+  .line-two { display: block !important; }
+  .tool-stack { vertical-align: middle; display: inline-flex; }
+  .plan-card { padding: 20px 16px 26px; }
+  .plan-icon { margin-right: 16px; width: 58px; height: 58px; }
+  .plan-icon svg { width: 49px; height: 49px; }
+  .plan-heading h2 { font-size: 25px; }
+  .price { font-size: 22px; }
+}

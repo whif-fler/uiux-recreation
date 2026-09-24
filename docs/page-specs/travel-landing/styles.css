@@ -1,0 +1,423 @@
+/* ============================================================
+   Capsule — visual recreation
+   Font: Poppins (closest Google-Fonts match to the reference's
+   rounded-geometric display/body face — see comment in index.html)
+   ============================================================ */
+
+:root{
+  --navy:          #1b2033;   /* card text */
+  --white:         #ffffff;
+  --nav-pill-bg:   rgba(255,255,255,0.16);
+  --nav-pill-border: rgba(255,255,255,0.35);
+  --login-bg:      rgba(255,255,255,0.28);
+  --card-radius:   20px;
+}
+
+*{ box-sizing: border-box; }
+
+html, body{ margin: 0; padding: 0; }
+
+body{
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--white);
+}
+
+/* ============ Sky background ============ */
+
+.sky{
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 900px 500px at 15% 0%, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 55%),
+    linear-gradient(165deg, #74bdf5 0%, #3f8fe8 32%, #1f66df 62%, #0d3fb8 100%);
+}
+
+/* soft blurred cloud shapes — purely decorative, CSS only */
+.clouds{
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.7;
+  background-image:
+    radial-gradient(ellipse 260px 90px at 6% 22%,  rgba(255,255,255,0.65) 0%, transparent 70%),
+    radial-gradient(ellipse 200px 70px at 2% 55%,  rgba(255,255,255,0.50) 0%, transparent 70%),
+    radial-gradient(ellipse 320px 110px at 92% 12%, rgba(255,255,255,0.55) 0%, transparent 70%),
+    radial-gradient(ellipse 260px 90px at 98% 48%,  rgba(255,255,255,0.45) 0%, transparent 70%),
+    radial-gradient(ellipse 360px 120px at 8% 92%,  rgba(255,255,255,0.45) 0%, transparent 70%),
+    radial-gradient(ellipse 300px 100px at 88% 88%, rgba(255,255,255,0.40) 0%, transparent 70%),
+    radial-gradient(ellipse 500px 160px at 50% 100%,rgba(255,255,255,0.32) 0%, transparent 70%);
+  filter: blur(6px);
+}
+
+.content{
+  position: relative;
+  z-index: 1;
+}
+
+/* ============ Header ============ */
+
+.site-header{
+  display: flex;
+  justify-content: center;
+  padding: 26px 20px 0;
+}
+
+.nav-pill{
+  display: flex;
+  align-items: center;
+  gap: 34px;
+  background: var(--nav-pill-bg);
+  border: 1px solid var(--nav-pill-border);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 999px;
+  padding: 7px 7px 7px 20px;
+}
+
+.logo{
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+}
+
+.logo-mark{ flex-shrink: 0; }
+
+.logo-text{
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.site-nav{
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.site-nav a{
+  font-size: 13.5px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.92);
+  text-decoration: none;
+}
+
+.nav-dropdown{
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.login-btn{
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--white);
+  text-decoration: none;
+  background: var(--login-bg);
+  padding: 9px 20px;
+  border-radius: 999px;
+}
+
+/* ============ Hero ============ */
+
+.hero{
+  padding: 60px 24px 70px;
+  text-align: center;
+}
+
+.hero-heading{
+  margin: 0 auto;
+  font-size: 68px;
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  color: var(--white);
+}
+
+.hero-heading .line{ display: block; }
+
+.line-fade{
+  background: linear-gradient(to bottom, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.25) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------- Card fan ---------- */
+
+.cards-fan{
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  height: 230px;
+  margin: -34px auto 0;
+  z-index: 2;
+}
+
+.card{
+  position: absolute;
+  border-radius: var(--card-radius);
+  box-shadow: 0 20px 34px -14px rgba(4,15,45,0.45);
+}
+
+/* ----- Card A : "Manage your flights..." ----- */
+.card-a{
+  left: 0px;
+  top: 40px;
+  width: 195px;
+  height: 150px;
+  background: var(--white);
+  color: var(--navy);
+  transform: rotate(-7deg);
+  z-index: 2;
+  padding: 16px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-a-text{
+  margin: 0;
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.inline-icon{
+  display: inline-block;
+  vertical-align: -1px;
+  margin: 0 1px;
+}
+
+.card-btn{
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--white);
+  background: var(--navy);
+  border: none;
+  border-radius: 999px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
+/* ----- Card B back : Norway ticket sliver ----- */
+.card-b-back{
+  left: 218px;
+  top: 4px;
+  width: 150px;
+  height: 190px;
+  background: #f4f1e9;
+  color: var(--navy);
+  transform: rotate(-5deg);
+  z-index: 1;
+  padding: 18px 16px;
+}
+
+.flag-emoji{
+  display: block;
+  font-size: 22px;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+.flag-emoji-dark{ margin-bottom: 0; }
+
+.ticket-label{
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #2745c9;
+  margin-bottom: 26px;
+}
+
+.ticket-days{
+  display: block;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.ticket-date{
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(27,32,51,0.55);
+  margin-top: 4px;
+}
+
+/* ----- Card B front : black boarding-pass ----- */
+.card-b-front{
+  left: 250px;
+  top: 40px;
+  width: 168px;
+  height: 190px;
+  background: #14161d;
+  color: var(--white);
+  transform: rotate(3deg);
+  z-index: 3;
+  padding: 16px 16px 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ticket-top{
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+
+.ticket-code{
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.ticket-code-sub{
+  font-size: 9.5px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.5);
+}
+
+.ticket-country{
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.6);
+  margin-top: 14px;
+}
+
+.ticket-days-big{
+  display: block;
+  font-size: 23px;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+.ticket-bottom{
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ticket-bottom .ticket-date{
+  color: rgba(255,255,255,0.7);
+  margin-top: 0;
+}
+
+.ticket-bottom svg{
+  color: rgba(255,255,255,0.8);
+  transform: rotate(35deg);
+}
+
+/* ----- Card C : New Jersey / California ----- */
+.card-c{
+  left: 448px;
+  top: 18px;
+  width: 172px;
+  height: 172px;
+  background: var(--white);
+  color: var(--navy);
+  transform: rotate(7deg);
+  z-index: 4;
+  padding: 14px 16px 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.route-row{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.route-city{
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.route-time{
+  display: block;
+  font-size: 10.5px;
+  color: #2745c9;
+  font-weight: 500;
+  margin: 3px 0 10px;
+}
+
+.route-time-muted{
+  color: rgba(27,32,51,0.4);
+}
+
+.card-c .card-btn{
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+/* ============ Subtext + CTA ============ */
+
+.hero-subtext{
+  margin: 40px auto 0;
+  font-size: 16px;
+  line-height: 1.55;
+  font-weight: 500;
+  color: rgba(255,255,255,0.88);
+}
+
+.btn-download{
+  margin-top: 26px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--navy);
+  background: var(--white);
+  text-decoration: none;
+  border-radius: 999px;
+  padding: 13px 26px;
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+
+@media (max-width: 900px){
+  .hero-heading{ font-size: 52px; }
+}
+
+@media (max-width: 760px){
+  .nav-pill{
+    gap: 16px;
+    padding: 7px 7px 7px 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .site-nav{ gap: 14px; }
+  .hero{ padding: 44px 18px 56px; }
+  .hero-heading{ font-size: 38px; }
+  .cards-fan{
+    height: 190px;
+    transform: scale(0.72);
+    transform-origin: top center;
+    margin-top: 6px;
+  }
+  .hero-subtext br{ display: none; }
+}
+
+@media (max-width: 480px){
+  .site-nav{ display: none; }
+  .hero-heading{ font-size: 30px; }
+  .cards-fan{
+    transform: scale(0.55);
+    height: 150px;
+  }
+}
