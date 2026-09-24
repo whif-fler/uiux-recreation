@@ -38,8 +38,7 @@ mobile.
 | `/pricing-plans` | Pricing Plans |
 | `/developer-portfolio` | Developer Portfolio Landing |
 
-All seven routes currently render plain placeholders. Implementation happens one
-route at a time, driven by the reference image for that screen.
+The seven routes are implemented one screen at a time from their provided reference designs.
 
 ## Local development
 
@@ -67,7 +66,7 @@ npm start
 The project is intended for deployment on [Vercel](https://vercel.com/) as a
 single Next.js app.
 
-Deployment URL: TBD
+Deployment URL: https://uiux-recreation.vercel.app
 
 ## Project structure
 
