@@ -1,18 +1,17 @@
 import type { Metadata } from "next";
 import { BackToHome } from "@/components/shared/back-to-home";
+import { TravelLandingScreen } from "./_components/travel-landing-screen";
 
 export const metadata: Metadata = {
   title: "Travel App Landing",
-  description: "Placeholder for the travel app landing page.",
+  description:
+    "Capsule keeps flights, tickets, bookings and documents in one place.",
 };
 
 export default function TravelLandingPage() {
   return (
     <>
-      <main className="p-8">
-        <h1>Travel App Landing</h1>
-        <p>Implementation pending.</p>
-      </main>
+      <TravelLandingScreen />
       <BackToHome />
     </>
   );

@@ -1,0 +1,708 @@
+/* ==========================================================================
+   /travel-landing — Capsule travel app landing
+   Recreation of the supplied reference design (1199 × 666 desktop).
+
+   Every value is measured from the reference image (see
+   docs/page-specs/travel-landing/visual-spec.md for the full derivation):
+   · reference viewport 1199 × 666
+   · headline  baseline₁ 167.5px, line pitch 71.5px, ink centre x ≈ 599.5
+   · nav pill  397,14 · 405 × 44 · radius 22
+   · CTA       508,584 · 183 × 41 · radius 20.5
+   · card cluster origin 278,286 (each card rotated from its top-left corner)
+
+   Tailwind's preflight (app/globals.css) already provides the element reset
+   the standalone prototype needed, so only component styles live here.
+   ========================================================================== */
+
+/* --------------------------------------------------------------- screen -- */
+/* The prototype painted all of this on <body>; here it is the route's own
+   full-viewport canvas so it never inherits the shell's theme colours. */
+.screen {
+  min-height: 100vh;
+  font-family:
+    var(--font-nunito-sans), "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-synthesis-weight: none;
+  color: #ffffff;
+  background-color: #3d8ed6;
+  background-image: url("/travel-landing/background.jpeg");
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* At viewports close to the reference ratio the artwork is stretched to the
+   full box so the backdrop lines up pixel for pixel with the reference. */
+@media (min-aspect-ratio: 7/4) and (max-aspect-ratio: 11/6) {
+  .screen {
+    background-size: 100% 100%;
+  }
+}
+
+/* ---------------------------------------------------------------- stage -- */
+.stage {
+  position: relative;
+  width: 100%;
+  max-width: 1199px;
+  margin: 0 auto;
+  padding: 14px 0 41px;
+}
+
+/* ------------------------------------------------------------------ nav -- */
+.nav-pill {
+  display: flex;
+  align-items: center;
+  width: 405px;
+  height: 44px;
+  margin: 0 auto;
+  padding: 0 13px 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 22px;
+  background-color: rgba(255, 255, 255, 0.15);
+  -webkit-backdrop-filter: blur(9px);
+  backdrop-filter: blur(9px);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex: none;
+}
+
+.brand-mark {
+  display: block;
+  width: 18px;
+  height: 19px;
+}
+
+.brand-mark svg {
+  width: 100%;
+  height: 100%;
+}
+
+.brand-name {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.013em;
+  line-height: 1;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-left: 42px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+}
+
+.nav-links a {
+  display: inline-flex;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.77);
+  transition: color 0.15s ease;
+}
+
+.nav-links a:hover,
+.nav-links a:focus-visible {
+  color: #ffffff;
+}
+
+.chevron {
+  width: 6px;
+  height: 4px;
+  margin-left: 7px;
+}
+
+.nav-login {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 53px;
+  height: 23px;
+  margin-left: auto;
+  border-radius: 11.5px;
+  background-color: rgba(255, 255, 255, 0.15);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: -0.017em;
+  color: rgba(255, 255, 255, 0.9);
+  transition: background-color 0.15s ease;
+}
+
+.nav-login:hover,
+.nav-login:focus-visible {
+  background-color: rgba(255, 255, 255, 0.28);
+}
+
+/* ------------------------------------------------------------- headline -- */
+/* letter-spacing is applied after every glyph, so the trailing negative space
+   would push the optical centre left by ls/2 — padding-right of |ls| cancels
+   it, making each line's ink centre independent of its tracking. The small
+   padding-left values then nudge each line onto the reference's ink centre
+   (the per-line lsb/rsb asymmetry differs, so one shared value cannot hit
+   all three). Tracking is fitted per line to the reference ink widths. */
+.headline {
+  margin-top: 47.25px;
+  font-size: 81px;
+  font-weight: 600;
+  line-height: 71.5px;
+  text-align: center;
+}
+
+.headline-line {
+  display: block;
+}
+
+.headline-line--1 {
+  opacity: 1;
+  letter-spacing: -0.0609em;
+  padding-right: 0.0609em;
+  padding-left: 0.037em;
+}
+
+.headline-line--2 {
+  opacity: 0.87;
+  letter-spacing: -0.0564em;
+  padding-right: 0.0564em;
+  padding-left: 0.0494em;
+}
+
+.headline-line--3 {
+  opacity: 0.73;
+  letter-spacing: -0.055em;
+  padding-right: 0.055em;
+}
+
+/* ---------------------------------------------------------- card stack -- */
+/* Centred on the stage with the reference's 17.5px left-of-centre offset
+   (at 1199px: 599.5 − 321.5 = 278, exactly the reference's cluster origin),
+   so the composition keeps its reference proportions at any stage width. */
+.cards-frame {
+  position: absolute;
+  left: calc(50% - 321.5px);
+  top: 286px;
+  width: 608px;
+  height: 186px;
+}
+
+.card {
+  position: absolute;
+  background-color: #ffffff;
+  color: #0d0d0d;
+  box-shadow: none;
+}
+
+/* Card A — feature copy */
+.card--a {
+  left: 0;
+  top: 38px;
+  width: 183px;
+  height: 118px;
+  border-radius: 11px;
+  transform: rotate(-7.48deg);
+  transform-origin: 0 0;
+}
+
+.card-copy {
+  padding: 11.5px 8px 0 11px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 15.5px;
+  letter-spacing: -0.054em;
+}
+
+.card-copy span {
+  display: block;
+  white-space: nowrap;
+}
+
+.emoji {
+  font-family:
+    "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+  font-size: 13px;
+  letter-spacing: normal;
+}
+
+.card-action {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #171717;
+  color: #ffffff;
+}
+
+.card-action--a {
+  left: 10px;
+  top: 82px;
+  width: 163px;
+  height: 23px;
+  gap: 9px;
+  padding-right: 10px;
+  border-radius: 9px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+
+.plus-dot {
+  width: 10px;
+  height: 10px;
+}
+
+/* Card Norway */
+.card--nor {
+  left: 253px;
+  top: 16px;
+  width: 90px;
+  height: 118px;
+  border-radius: 15px;
+  transform: rotate(11deg);
+  transform-origin: 0 0;
+}
+
+.card-flag {
+  position: absolute;
+  display: block;
+  overflow: hidden;
+}
+
+.card-flag svg {
+  width: 100%;
+  height: 100%;
+}
+
+.card-flag--no {
+  left: 14px;
+  top: 6px;
+  width: 36px;
+  height: 26px;
+  border-radius: 3px;
+}
+
+.card-country {
+  position: absolute;
+  left: 15px;
+  top: 49px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 12px;
+  letter-spacing: -0.01em;
+  color: #2f74cc;
+}
+
+.card-days {
+  position: absolute;
+  left: 15px;
+  top: 67px;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 21px;
+  letter-spacing: -0.024em;
+  color: #0d0d0d;
+}
+
+.card-date {
+  position: absolute;
+  left: 15px;
+  top: 92px;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 11px;
+  letter-spacing: 0.03em;
+  color: #7a7a7a;
+}
+
+/* Card black — flight status */
+.card--blk {
+  left: 276px;
+  top: 28px;
+  width: 132px;
+  height: 131px;
+  border-radius: 16px;
+  background-color: #000000;
+  color: #ffffff;
+  transform: rotate(-8.6deg);
+  transform-origin: 0 0;
+}
+
+.card-flag--us {
+  left: 15px;
+  top: 16px;
+  width: 35px;
+  height: 24px;
+  border-radius: 3px;
+}
+
+.blk-number {
+  position: absolute;
+  left: 71px;
+  top: 15.5px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 12px;
+  letter-spacing: 0.01em;
+  color: #a3a3a3;
+}
+
+.blk-ref {
+  position: absolute;
+  left: 73px;
+  top: 31.75px;
+  font-size: 8px;
+  font-weight: 500;
+  line-height: 9px;
+  letter-spacing: -0.01em;
+  color: #7a7a7a;
+}
+
+.blk-country {
+  position: absolute;
+  left: 17px;
+  top: 59px;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 10px;
+  letter-spacing: 0.017em;
+  color: #5c84bd;
+}
+
+.blk-plane {
+  position: absolute;
+}
+
+.blk-plane--1 {
+  left: 101px;
+  top: 61px;
+  width: 13px;
+  height: 15px;
+}
+
+.blk-plane--2 {
+  left: 101px;
+  top: 100px;
+  width: 14px;
+  height: 16px;
+}
+
+.blk-dash {
+  position: absolute;
+  left: 105px;
+  top: 78px;
+  width: 0;
+  height: 19px;
+  border-left: 1.5px dashed #3d3d3d;
+}
+
+.blk-days {
+  position: absolute;
+  left: 17px;
+  top: 76px;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 21px;
+  letter-spacing: -0.024em;
+  color: #ffffff;
+}
+
+.blk-date {
+  position: absolute;
+  left: 17px;
+  top: 104px;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 11px;
+  letter-spacing: 0.03em;
+  color: #7a7a7a;
+}
+
+/* Card C — route */
+.card--c {
+  left: 496px;
+  top: 0;
+  width: 112px;
+  height: 146px;
+  border-radius: 13px;
+  transform: rotate(13.34deg);
+  transform-origin: 0 0;
+}
+
+.c-row {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 14px;
+  letter-spacing: -0.02em;
+  color: #0d0d0d;
+}
+
+.c-row--from {
+  left: 13px;
+  right: 11px;
+  top: 10px;
+}
+
+.c-row--to {
+  left: 11px;
+  right: 12px;
+  top: 83px;
+}
+
+.c-arrow {
+  width: 14px;
+  height: 14px;
+  flex: none;
+}
+
+.c-row--time {
+  left: 12px;
+  justify-content: flex-start;
+  gap: 8px;
+  font-size: 8px;
+  font-weight: 500;
+  line-height: 10px;
+  letter-spacing: -0.06em;
+  color: #939393;
+}
+
+.c-row--t1 {
+  top: 30px;
+}
+
+.c-row--t2 {
+  top: 65px;
+}
+
+.c-plane {
+  width: 12px;
+  height: 14px;
+  flex: none;
+}
+
+.c-plane--muted {
+  opacity: 0.45;
+}
+
+.c-dash {
+  position: absolute;
+  left: 17px;
+  top: 43px;
+  width: 0;
+  height: 21px;
+  border-left: 1.5px dashed #c4c4c4;
+}
+
+.card-action--c {
+  left: 10px;
+  top: 109px;
+  width: 89px;
+  height: 26px;
+  border-radius: 9px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+/* ------------------------------------------------------------- subcopy -- */
+/* Per-line tracking fitted to the reference ink widths; padding-left of the
+   same size keeps each line's centre independent of that tracking. */
+.subcopy {
+  margin-top: 162px;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 27.5px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.73);
+}
+
+.subcopy span {
+  display: block;
+}
+
+.subcopy-line--1 {
+  letter-spacing: 0.0306em;
+  padding-left: 0.0306em;
+}
+
+.subcopy-line--2 {
+  letter-spacing: 0.04em;
+  padding-left: 0.04em;
+}
+
+.subcopy-line--3 {
+  letter-spacing: 0.0422em;
+  padding-left: 0.0422em;
+}
+
+/* ----------------------------------------------------------------- CTA -- */
+.cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 183px;
+  height: 41px;
+  margin: 19.75px auto 0;
+  border-radius: 20.5px;
+  background-color: #ffffff;
+  color: #131313;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.019em;
+  transition: transform 0.15s ease;
+}
+
+.cta:hover,
+.cta:focus-visible {
+  transform: translateY(-1px);
+}
+
+.cta-mark {
+  width: 12px;
+  height: 14px;
+  flex: none;
+}
+
+/* ==========================================================================
+   Responsive — the reference only exists at desktop size, so below 900px the
+   composition is re-flowed on purpose instead of being scaled down.
+   ========================================================================== */
+@media (max-width: 900px) {
+  .stage {
+    padding: 12px 18px 40px;
+  }
+
+  .nav-pill {
+    width: 100%;
+    padding: 0 12px;
+  }
+
+  .nav-links {
+    margin-left: 18px;
+    gap: 14px;
+  }
+
+  .headline {
+    margin-top: 34px;
+    font-size: clamp(34px, 13.5vw, 81px);
+    line-height: 0.883;
+  }
+
+  /* Card cluster: keep the original composition, scale it to the column. */
+  .cards-wrap {
+    position: relative;
+    height: calc(186px * var(--cards-scale, 0.7));
+    margin-top: 22px;
+    overflow: hidden;
+  }
+
+  .cards-frame {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    margin-left: -304px;
+    transform: scale(var(--cards-scale, 0.7));
+    transform-origin: top center;
+  }
+
+  .subcopy {
+    margin-top: 26px;
+    font-size: clamp(15px, 4.6vw, 18px);
+    line-height: 1.528;
+  }
+
+  .cta {
+    margin-top: 26px;
+  }
+}
+
+@media (max-width: 700px) {
+  .cards-wrap {
+    --cards-scale: 0.68;
+  }
+
+  .nav-links {
+    margin-left: 12px;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 560px) {
+  .cards-wrap {
+    --cards-scale: 0.55;
+  }
+
+  .nav-pill {
+    padding: 0 10px;
+  }
+
+  .brand {
+    gap: 5px;
+  }
+
+  .brand-name {
+    font-size: 12px;
+  }
+
+  .nav-links {
+    margin-left: 10px;
+    gap: 10px;
+    font-size: 11px;
+  }
+
+  .chevron {
+    margin-left: 5px;
+  }
+
+  .nav-login {
+    width: auto;
+    height: 26px;
+    padding: 0 11px;
+    font-size: 11px;
+  }
+
+  .cta {
+    width: min(183px, 66vw);
+    height: clamp(38px, 11vw, 41px);
+    font-size: clamp(14px, 4.1vw, 16px);
+  }
+}
+
+@media (max-width: 380px) {
+  .cards-wrap {
+    --cards-scale: 0.47;
+  }
+
+  .stage {
+    padding: 10px 14px 36px;
+  }
+
+  .nav-links {
+    gap: 8px;
+    font-size: 10px;
+  }
+
+  .brand-mark {
+    width: 16px;
+    height: 17px;
+  }
+
+  .brand-name {
+    font-size: 11px;
+  }
+}
+
+/* ------------------------------------------------------- reduced motion -- */
+@media (prefers-reduced-motion: reduce) {
+  .screen *,
+  .screen *::before,
+  .screen *::after {
+    transition-duration: 0.01ms !important;
+  }
+}

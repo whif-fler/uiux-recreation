@@ -1,18 +1,16 @@
 import type { Metadata } from "next";
 import { BackToHome } from "@/components/shared/back-to-home";
+import { RealEstateScreen } from "./_components/real-estate-screen";
 
 export const metadata: Metadata = {
   title: "Real Estate Investment Landing",
-  description: "Placeholder for the real estate investment landing page.",
+  description: "Brickwise real estate investing landing — hero, search, map, featured listing, stats and features.",
 };
 
 export default function RealEstateLandingPage() {
   return (
     <>
-      <main className="p-8">
-        <h1>Real Estate Investment Landing</h1>
-        <p>Implementation pending.</p>
-      </main>
+      <RealEstateScreen />
       <BackToHome />
     </>
   );

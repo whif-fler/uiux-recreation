@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+/*
+ * Theme system — attribute-driven dark mode.
+ *
+ * <html data-theme="light|dark"> is written by components/shared/theme-toggle.tsx
+ * and restored before first paint by the inline boot script in app/layout.tsx
+ * (localStorage key: "theme"). When no explicit choice exists, the original
+ * `prefers-color-scheme` behaviour below applies unchanged — status quo for
+ * first-time visitors and for the visual audits (which never set data-theme).
+ */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -12,6 +23,16 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/*
+ * Original system-preference block — kept byte-identical to the template.
+ * It must behave exactly as before the theme toggle existed (status quo for
+ * first-time visitors, audits, and routes that never set data-theme).
+ *
+ * An explicit `data-theme` deliberately does NOT flip these shell tokens:
+ * the art-showcase route paints its own canvas (`.art-showcase-screen` below)
+ * and carries its own `dark:` styles, while the other six routes must render
+ * identically whatever theme state the toggle leaves on <html>.
+ */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -23,4 +44,143 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/*
+ * Theme ripple (View Transitions).
+ *
+ * The default old/new cross-fade would fight the JS-driven reveal, so both
+ * snapshots render statically; theme-toggle.tsx animates the clip-path of
+ * `::view-transition-new(root)` from the click coordinates instead (old
+ * snapshot stays underneath, new one expands over it). These pseudo-elements
+ * only exist while a view transition is running — no effect on static renders.
+ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* ============================= /art-showcase ============================= */
+
+/*
+ * Page canvas — moved verbatim from art-showcase-screen.tsx's inline style so
+ * the audited light render stays bit-identical (light values are the source
+ * of truth; only [data-theme="dark"] diverges below).
+ *
+ * Soft paper mottle matching the reference's empty-area luminance
+ * (L≈241..247): top band, top-right pocket, faint right-mid pool, lower-right
+ * pocket, left-edge band and a bottom-left pool. Earlier entries paint over
+ * later ones (the top-right pocket sits above the opaque top band).
+ */
+.art-showcase-screen {
+  background-color: #f7f7f6;
+  background-image:
+    radial-gradient(24% 24% at 93% 3%, #f1f1f1 0%, #f1f1f1 55%, rgba(241, 241, 241, 0) 100%),
+    radial-gradient(9% 34% at 103% 47%, #f2f1f1 0%, rgba(242, 241, 241, 0) 75%),
+    radial-gradient(9% 22% at 70% 91%, #f1f1f1 0%, #f1f1f1 35%, rgba(241, 241, 241, 0) 100%),
+    radial-gradient(17% 42% at -1% 65%, #f1f1f1 0%, #f1f1f1 45%, rgba(241, 241, 241, 0) 100%),
+    radial-gradient(34% 27% at 5% 97%, #f1f1f1 0%, #f1f1f1 40%, rgba(241, 241, 241, 0) 100%),
+    linear-gradient(180deg, #f4f3f3 0%, #f4f3f3 18%, rgba(244, 243, 243, 0) 34%);
+}
+
+/*
+ * Dark treatment — explicit `data-theme="dark"` ONLY, never the system
+ * preference, so audits and first-time visits always show the reference's
+ * light canvas. Same mottle structure as the light set with a constant
+ * −227 offset: the base reads #141414 and the blotches stay the same 3–6
+ * levels darker than the base, preserving the light version's character.
+ */
+[data-theme="dark"] .art-showcase-screen {
+  background-color: #141414;
+  background-image:
+    radial-gradient(24% 24% at 93% 3%, #0e0e0e 0%, #0e0e0e 55%, rgba(14, 14, 14, 0) 100%),
+    radial-gradient(9% 34% at 103% 47%, #0f0e0e 0%, rgba(15, 14, 14, 0) 75%),
+    radial-gradient(9% 22% at 70% 91%, #0e0e0e 0%, #0e0e0e 35%, rgba(14, 14, 14, 0) 100%),
+    radial-gradient(17% 42% at -1% 65%, #0e0e0e 0%, #0e0e0e 45%, rgba(14, 14, 14, 0) 100%),
+    radial-gradient(34% 27% at 5% 97%, #0e0e0e 0%, #0e0e0e 40%, rgba(14, 14, 14, 0) 100%),
+    linear-gradient(180deg, #111010 0%, #111010 18%, rgba(17, 16, 16, 0) 34%);
+}
+
+/*
+ * Mobile overlay scrollbars — art-showcase only, ≤640px.
+ * Scoped with `html:has(.art-showcase-screen)` so the other six routes keep
+ * their scrollbars. Phones render overlay scrollbars natively; the 15px
+ * classic desktop bar would steal column width whenever the page grows
+ * taller than the viewport (it does at ~430–640 with the reference-sized
+ * headline and 4:5 card), silently shrinking the text column and breaking
+ * the reference's headline/subtitle line breaks. Hiding it keeps the column
+ * arithmetic deterministic — `min(vw, 448) − 32` — while wheel, touch and
+ * keyboard scrolling keep working.
+ */
+@media (max-width: 640px) {
+  html:has(.art-showcase-screen) {
+    scrollbar-width: none;
+  }
+  html:has(.art-showcase-screen)::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/*
+ * Element scale (`--k`) — art-showcase desktop sizing.
+ *
+ * There is deliberately NO container scaling here (user: "instead of scaling
+ * the whole container … increase the size of the individual elements, that
+ * way it'll not interfere when we change width"): every desktop-visible size
+ * in the components is written as `calc(<reference px> * var(--k, 1))`, and
+ * the inline boot script in app/layout.tsx writes the unitless `--k` on
+ * <html> before first paint — `h/754` above the reference width (individual
+ * elements grow to fill large screens like the reference frame), `min(1,
+ * h/754)` in 641–1282 (shrink-only so short windows never scroll;
+ * reference-exact at 1282×754 where `--k` is 1), and 1 ≤640 (the mobile
+ * comp). `--k` never depends on width inside a band, so resizing the
+ * window's WIDTH resizes nothing — the layout re-centres and clips instead
+ * (the native+clip regime: the fixed 820px headline box and the 930px stage
+ * overflow symmetrically at the centred viewport edges down to 641px). The
+ * `1` fallback covers JS-disabled loads and the other six routes (which
+ * never reference `--k`).
+ *
+ * At ≥641 the route box is pinned to the viewport and its overflow clipped
+ * vertically: content is exactly `754 × --k` = viewport height by
+ * construction, so the clip only ever eats sub-pixel rounding of that sum —
+ * it guarantees no classic scrollbar can latch from a +1px round-up, while
+ * ≤640 keeps `min-h-dvh` auto height (the phone composition scrolls).
+ */
+@media (min-width: 641px) {
+  .art-showcase-screen {
+    height: 100dvh;
+    overflow-y: clip;
+  }
+}
+
+/* ============================= /developer-portfolio ============================= */
+
+.developer-portfolio-screen {
+  background-color: #fafafa;
+}
+
+[data-theme="dark"] .developer-portfolio-screen {
+  background-color: #0f0f0f;
+  color: #ededed;
+}
+
+[data-theme="dark"] .developer-portfolio-screen header a {
+  color: #ededed;
+}
+
+[data-theme="dark"] .developer-portfolio-screen [class*="text-[#111]"] {
+  color: #ededed !important;
+}
+
+[data-theme="dark"] .developer-portfolio-screen [class*="text-[#555]"] {
+  color: #a0a0a0 !important;
+}
+
+[data-theme="dark"] .developer-portfolio-screen [class*="text-[#777]"] {
+  color: #8a8a8a !important;
+}
+
+[data-theme="dark"] .developer-portfolio-screen .border-\[rgba\(160\,160\,160\,0\.25\)\] {
+  border-color: rgba(255, 255, 255, 0.12) !important;
 }
