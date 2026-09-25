@@ -1,18 +1,17 @@
 import type { Metadata } from "next";
 import { BackToHome } from "@/components/shared/back-to-home";
+import { DeveloperPortfolioScreen } from "./_components/developer-portfolio-screen";
 
 export const metadata: Metadata = {
   title: "Developer Portfolio Landing",
-  description: "Placeholder for the developer portfolio landing page.",
+  description:
+    "API-based developer portfolio hero with split layout, headline, supporting copy, CTAs, phone mockup and company logo strip.",
 };
 
 export default function DeveloperPortfolioPage() {
   return (
     <>
-      <main className="p-8">
-        <h1>Developer Portfolio Landing</h1>
-        <p>Implementation pending.</p>
-      </main>
+      <DeveloperPortfolioScreen />
       <BackToHome />
     </>
   );
