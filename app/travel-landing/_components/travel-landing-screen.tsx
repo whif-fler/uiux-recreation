@@ -59,14 +59,17 @@ export function TravelLandingScreen() {
 
   return (
     <div className={`${styles.screen} ${nunitoSans.variable}`}>
-      {/* Runs before the stage is parsed/painted (no hydration flash): scales
-          the 1199 × 666 reference frame to the real window on desktop. The
-          value goes into a script-created <style> — never an attribute React
-          renders — so hydration stays clean. */}
+      {/* Runs before the stage is parsed/painted (no hydration flash).
+          ≥1199px: scale the 1199 × 666 reference frame to the real window
+          (fit) — the backdrop stretches with it near the reference aspect so
+          sky and composition stay aligned. Below 1199px the composition stays
+          at native size (it narrows, it never shrinks); ≤900px is re-flowed
+          by CSS. Values go into a script-created <style> — never an attribute
+          React renders — so hydration stays clean. */}
       <script
         dangerouslySetInnerHTML={{
           __html:
-            "(function(){var s=document.createElement('style');document.head.appendChild(s);function f(){s.textContent=':root{--stage-zoom:'+(innerWidth>900?Math.min(innerWidth/1199,innerHeight/666).toFixed(4):'1')+'}'}f();addEventListener('resize',f)})()",
+            "(function(){var s=document.createElement('style');document.head.appendChild(s);function f(){var w=innerWidth,h=innerHeight,fit=w>=1199,a=w/h;s.textContent=':root{--stage-zoom:'+(fit?Math.min(w/1199,h/666).toFixed(4):'1')+';--screen-bg-size:'+(fit&&a>=1.5&&a<=2.1?'100% 100%':'cover')+'}'}f();addEventListener('resize',f)})()",
         }}
       />
       <div className={styles.stage}>

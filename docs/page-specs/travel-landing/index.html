@@ -18,17 +18,26 @@
   </head>
 
   <body>
-    <!-- Scales the 1199 × 666 reference frame to the real window on desktop
-         (runs before the stage parses/paints, so there is no flash). -->
+    <!-- ≥1199px: scale the 1199 × 666 reference frame to the real window
+         (fit); the backdrop stretches with it near the reference aspect so
+         sky and composition stay aligned. Below 1199px the composition stays
+         at native size (it narrows, it never shrinks); ≤900px is re-flowed
+         by CSS. Runs before the stage parses/paints, so there is no flash. -->
     <script>
       (function () {
         var d = document.documentElement;
         function f() {
+          var w = innerWidth,
+            h = innerHeight,
+            fit = w >= 1199,
+            a = w / h;
           d.style.setProperty(
             "--stage-zoom",
-            innerWidth > 900
-              ? Math.min(innerWidth / 1199, innerHeight / 666).toFixed(4)
-              : "1"
+            fit ? Math.min(w / 1199, h / 666).toFixed(4) : "1"
+          );
+          d.style.setProperty(
+            "--screen-bg-size",
+            fit && a >= 1.5 && a <= 2.1 ? "100% 100%" : "cover"
           );
         }
         f();
