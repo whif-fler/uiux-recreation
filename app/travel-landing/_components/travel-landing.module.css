@@ -23,10 +23,10 @@
   background-size: cover;
 }
 
-/* Laptop-shaped windows at ≥1199px: the artwork is stretched to the full
-   box, so the backdrop shares the composition's mapping exactly and diverges
-   only by the aspect-ratio delta (better than `cover`, which drifts on both
-   axes). Everywhere else — tall/narrow windows, native 901–1198px, the mobile
+/* Laptop-shaped windows at ≥1199px: the sky is stretched edge-to-edge so the
+   whole backdrop — down to its bottom edge — stays visible on screen, where
+   `cover` would crop it. The sky is smooth, so the mild distortion never
+   reads. Everywhere else — tall/narrow windows, 901–1198px, the mobile
    reflow — `cover` from the rule above is correct. */
 @media (min-width: 1199px) and (min-aspect-ratio: 3/2) and (max-aspect-ratio: 21/10) {
   .screen {
@@ -39,14 +39,10 @@
 }
 
 /* ---------------------------------------------------------------- stage -- */
-/* The stage is the reference frame (1199 × 666). At ≥1199px it is uniformly
-   zoomed to fill the real window — `min(vw/1199, vh/666)` evaluated directly
-   in CSS, so the fit exists at first paint and is re-evaluated by the browser
-   itself on resize or client-side navigation (no inline <script>: React 19
-   neither executes nor accepts scripts rendered inside components).
-   Between 901–1198px the zoom is 1: the layout stays at native size and only
-   narrows. At ≤900px the reflow below takes over. Browsers without calc()
-   length division keep zoom 1 — native and centred, still correct. */
+/* The stage is the reference frame (1199 × 666). Desktop is fixed-size:
+   the full-res visual scale is kept at every desktop width (no shrinking
+   when narrowing). ≥901px shows the same element sizes; the frame is centred
+   and extra width/height shows more sky. ≤900px re-flows (mobile). */
 .stage {
   position: relative;
   width: 100%;
@@ -55,9 +51,22 @@
   padding: 14px 0 41px;
 }
 
-@media (min-width: 1199px) {
+/* Lock desktop to the current full-res visual size — no width-based shrink.
+   Uses the full-res fill scale (1920→1.601) as the fixed desktop size so
+   narrowing 1920→901 keeps nav 405×44, CTA 183×41, headline 81px local
+   (visual ~130px) constant; viewport smaller than the visual stage crops
+   sky equally on both sides via centered transform. */
+@media (min-width: 901px) {
+  .screen {
+    overflow-x: clip;
+  }
+
   .stage {
-    zoom: min(calc(100vw / 1199px), calc(100vh / 666px));
+    width: 1199px;
+    margin-left: auto;
+    margin-right: auto;
+    transform: scale(1.60133);
+    transform-origin: top center;
   }
 }
 
@@ -618,11 +627,10 @@
 
 /* ==========================================================================
    Responsive — the reference only exists at desktop size:
-   · ≥1199px   the stage is uniformly zoomed by the fit script (reference
-     proportions at any laptop resolution);
-   · 901–1198  the composition stays at native size — it narrows, it never
-     shrinks; the window's extra height simply shows more sky;
-   · ≤900px    the composition is re-flowed on purpose: full-width nav, fluid
+   · ≥901px    fixed desktop scale (full-res visual size kept at every width
+     — narrowing never shrinks elements; smaller viewports crop sky, not
+     content);
+   · ≤900px    re-flowed on purpose: full-width nav, fluid
      headline, comfortable tap targets, and a re-stacked card cluster whose
      type stays readable instead of scaling down with the desktop frame.
    ========================================================================== */

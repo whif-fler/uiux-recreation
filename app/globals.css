@@ -61,6 +61,144 @@ body {
   mix-blend-mode: normal;
 }
 
+/* ============================= / (home index) ============================= */
+
+/*
+ * The hub is the only route that owns a themed surface — the seven
+ * recreations each paint their own canvas. Tokens therefore live on `.hub`
+ * instead of the shell tokens, and the page follows the app's contract:
+ * system preference by default, an explicit `data-theme` from
+ * components/shared/theme-toggle.tsx wins in both directions (the
+ * `:not([data-theme="light"])` guard stops a dark system preference from
+ * overriding a deliberately chosen light theme). The dark block is written
+ * twice because a declaration can't be shared between a media query and a
+ * plain selector without emitting it for every route.
+ */
+.hub {
+  --hub-canvas: #f1f2f4;
+  --hub-surface: #ffffff;
+  --hub-chrome: #f7f8fa;
+  --hub-ink: #0c0e12;
+  --hub-muted: #5b616c;
+  --hub-line: #e3e5e9;
+  --hub-line-strong: #c8ccd3;
+  --hub-accent: #ffb020;
+  min-height: 100dvh;
+  background-color: var(--hub-canvas);
+  color: var(--hub-ink);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .hub {
+    --hub-canvas: #0b0c0e;
+    --hub-surface: #15171b;
+    --hub-chrome: #101216;
+    --hub-ink: #f1f2f4;
+    --hub-muted: #9aa1ac;
+    --hub-line: #262a30;
+    --hub-line-strong: #3d434b;
+    --hub-accent: #ffc44d;
+  }
+}
+
+[data-theme="dark"] .hub {
+  --hub-canvas: #0b0c0e;
+  --hub-surface: #15171b;
+  --hub-chrome: #101216;
+  --hub-ink: #f1f2f4;
+  --hub-muted: #9aa1ac;
+  --hub-line: #262a30;
+  --hub-line-strong: #3d434b;
+  --hub-accent: #ffc44d;
+}
+
+/* Route path / capture size / section labels — one mono voice for all of them. */
+.hub-meta {
+  font-family: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+  font-size: 11px;
+  line-height: 1.4;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--hub-muted);
+}
+
+/* Open badge in a card's corner: quiet at rest, amber on hover/focus. */
+.hub-open {
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.hub-card:hover .hub-open,
+.hub-card:focus-visible .hub-open {
+  background-color: var(--hub-accent);
+  border-color: transparent;
+  color: #0c0e12;
+  transform: translateY(-1px);
+}
+
+/*
+ * Preview and entrance motion — both suppressed under reduced motion (the
+ * preview then stays parked at the top of the capture, and cards render
+ * immediately).
+ *
+ * Tall captures scroll from top to bottom on hover because there is more
+ * page below the fold than fits the frame; wide captures have nothing below
+ * to scroll to, so they push in instead. Selection is by `data-pan`, written
+ * by app/_components/screen-card.tsx from each capture's real aspect ratio.
+ */
+.hub-shot__img {
+  object-position: center top;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hub-shot__img {
+    transition:
+      object-position 800ms cubic-bezier(0.22, 0.61, 0.36, 1),
+      transform 800ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  .hub-card:hover .hub-shot__img[data-pan="y"],
+  .hub-card:focus-visible .hub-shot__img[data-pan="y"] {
+    object-position: center bottom;
+  }
+
+  .hub-card:hover .hub-shot__img[data-pan="zoom"],
+  .hub-card:focus-visible .hub-shot__img[data-pan="zoom"] {
+    transform: scale(1.05);
+  }
+
+  /* Load-in stagger; `--i` is the card's position in the index. */
+  .hub-card {
+    animation: hub-rise 480ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    animation-delay: calc(var(--i, 0) * 55ms);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hub-shot__img,
+  .hub-open {
+    transition: none;
+  }
+
+  .hub-card:hover .hub-open {
+    transform: none;
+  }
+}
+
+@keyframes hub-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* ============================= /art-showcase ============================= */
 
 /*
@@ -123,29 +261,38 @@ body {
 }
 
 /*
- * Element scale (`--k`) — art-showcase desktop sizing.
+ * Element scale (`--k`) — art-showcase desktop sizing (user: "render the demo
+ * window in full laptop screen size and you'll be able to match the proper
+ * card and overall ui/ux design and sizes").
  *
  * There is deliberately NO container scaling here (user: "instead of scaling
- * the whole container … increase the size of the individual elements, that
- * way it'll not interfere when we change width"): every desktop-visible size
- * in the components is written as `calc(<reference px> * var(--k, 1))`, and
- * the inline boot script in app/layout.tsx writes the unitless `--k` on
- * <html> before first paint — `h/754` above the reference width (individual
- * elements grow to fill large screens like the reference frame), `min(1,
- * h/754)` in 641–1282 (shrink-only so short windows never scroll;
- * reference-exact at 1282×754 where `--k` is 1), and 1 ≤640 (the mobile
- * comp). `--k` never depends on width inside a band, so resizing the
- * window's WIDTH resizes nothing — the layout re-centres and clips instead
- * (the native+clip regime: the fixed 820px headline box and the 930px stage
+ * the whole container … increase the size of the individual elements"): every
+ * desktop-visible size is written as `calc(<reference px> * var(--k, 1))` and
+ * the inline boot script in app/layout.tsx writes the unitless `--k` before
+ * first paint — `h/754` at ≥641, `1` at ≤640 and on every other route.
+ * The reference frame is 1282×754, so HEIGHT is what preserves the reference's
+ * proportions: at any laptop viewport the cards keep 192/754 of the height,
+ * the bottom gap keeps 57/754, and the content is exactly viewport height —
+ * the design fills the frame the way the reference does, with nothing cut off
+ * and no scrollbar (user: "render the demo window in full laptop screen size
+ * and you'll be able to match the proper card and overall ui/ux design and
+ * sizes"). There is deliberately no `max(1, …)` floor: flooring at 1 on a
+ * short window (1366×625 viewport → `--k` 0.829) would keep reference px but
+ * cut the bottom 72px — CTA row included — which is what "elements get small"
+ * and "the bottom gap doesn't match" complaints were really about: the design
+ * stopped filling the frame. WIDTH never enters the formula, so dragging the
+ * window's width resizes nothing (the layout re-centres and clips instead: the
+ * native+clip regime — the fixed 820px headline box and the 930px stage
  * overflow symmetrically at the centred viewport edges down to 641px). The
- * `1` fallback covers JS-disabled loads and the other six routes (which
- * never reference `--k`).
+ * `1` fallback covers JS-disabled loads and the other six routes (which never
+ * reference `--k`).
  *
  * At ≥641 the route box is pinned to the viewport and its overflow clipped
- * vertically: content is exactly `754 × --k` = viewport height by
- * construction, so the clip only ever eats sub-pixel rounding of that sum —
- * it guarantees no classic scrollbar can latch from a +1px round-up, while
- * ≤640 keeps `min-h-dvh` auto height (the phone composition scrolls).
+ * vertically: with `--k = h/754` the content is exactly the viewport height
+ * at every window size, so the clip only eats sub-pixel rounding and
+ * guarantees no scrollbar can latch (user: "i don't want scroll to appear" →
+ * "clip, never adapt") and nothing is ever cut off. ≤640 keeps `min-h-dvh`
+ * auto height (the phone composition scrolls).
  */
 @media (min-width: 641px) {
   .art-showcase-screen {
@@ -160,12 +307,27 @@ body {
   background-color: #fafafa;
 }
 
-[data-theme="dark"] .developer-portfolio-screen {
-  background-color: #0f0f0f;
-  color: #ededed;
+/*
+ * Hero frame — side-by-side layout only (≥1581px).
+ *
+ * Every element renders at its full design size (no viewport scaling), and the
+ * hero copy is 706px tall. Below 1581px the copy and the 440×900 phone no
+ * longer fit next to each other, so the copy stacks (`max-[1580px]:…`) and the
+ * hero must be auto-height there — an inline/fixed height would let
+ * `overflow-hidden` clip the phone and the logo rows with no way to scroll.
+ *
+ * Above it: `max(760px, 100vh − 110px)` holds the 706px-tall copy in every
+ * short-but-wide window (760 = 706 + 54px breathing room) and fills the rest
+ * of the viewport so the phone keeps its bottom crop.
+ */
+@media (min-width: 1581px) {
+  .developer-portfolio-hero {
+    height: max(760px, calc(100vh - 110px));
+  }
 }
 
-[data-theme="dark"] .developer-portfolio-screen header a {
+[data-theme="dark"] .developer-portfolio-screen {
+  background-color: #0f0f0f;
   color: #ededed;
 }
 

@@ -48,24 +48,26 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         />
         {/* /art-showcase element scale (`--k`) BEFORE first paint — there is NO
             container scaling on this route (user: "instead of scaling the whole
-            container … increase the size of the individual elements, that way
-            it'll not interfere when we change width"). Every desktop-visible
-            size in the components is `calc(<reference px> * var(--k, 1))`, and
+            container … increase the size of the individual elements"). Every
+            desktop-visible size is `calc(<reference px> * var(--k, 1))`, and
             this script writes the unitless `--k` while the head still parses
             (CSS alone can't derive a number from viewport height — calc() can't
             divide a length by a length):
-              ≥1283   → h/754      elements fill any large screen's HEIGHT like
-                                   the reference frame (grows above 754, shrinks
-                                   below → never scrolls)
-              641–1282 → min(1, h/754)  reference-exact at 1282×754 (`--k` 1),
-                                   shrink-only in short windows (1280×720 →
-                                   0.954907 — same as the old "short" fit)
-              ≤640    → 1          the mobile comp owns its sizing
-            `--k` never depends on width INSIDE a band, so dragging the window's
-            width doesn't resize a single element — the layout re-centres and
-            clips (the native+clip desktop regime). Between 641 and 1282 the
-            stage/headline overflow clips at the centred edges (user: "keep
-            overall size and everything same … allow the cards to be clipped").
+              ≥641 → h/754
+            The reference frame is 1282×754, so HEIGHT alone preserves the
+            reference's proportions: at any laptop window the cards keep
+            192/754 of the height, the bottom gap keeps 57/754, and the
+            content is exactly viewport height — the design fills the frame the
+            way the reference does, with nothing cut off and no scrollbar
+            (user: "render the demo window in full laptop screen size and you'll
+            be able to match the proper card and overall ui/ux design and
+            sizes"; also "i don't want scroll to appear"). WIDTH never enters
+            the formula, so changing the width resizes nothing (user: "when the
+            width is decreased i want all the elements to be fixed size") — the
+            layout re-centres and clips instead (native+clip). No `max(1, …)`
+            floor: on a short window (1366×625 viewport → `--k` 0.829) flooring
+            at 1 would cut the bottom 72px and take the CTA row with it.
+            ≤640 stays 1 (the mobile comp owns its sizing).
             Re-applies on resize, exposes itself for client-side route mounts,
             and clears itself on every other route (--k absent → `1` fallback). */}
         <script
@@ -75,8 +77,7 @@ var R=document.documentElement;
 function artElementScale(){
 if(location.pathname==="/art-showcase"){
 var w=innerWidth,h=innerHeight,k=1;
-if(w>=641){k=Math.min(1,h/754);}
-if(w>=1283){k=h/754;}
+if(w>=641){k=h/754;}
 R.style.setProperty("--k",String(k));
 }
 else{R.style.removeProperty("--k");}

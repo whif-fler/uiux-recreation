@@ -11,13 +11,20 @@ import { EASE_GLIDE, EASE_OUT, TIMELINE } from "./motion-timeline";
 const STEP_PCT = 65;
 const PEEK_SCALE = 0.85;
 const PEEK_OPACITY = 0.7;
-/** Cover-flow depth: side cards angle away from the viewer (3D). */
-const ROTATE_Y = 30;
+/** Cover-flow depth: side cards angle away from the viewer (3D). Kept
+ *  shallow (14°) to match the user's reference image, whose peeking cards
+ *  read as near-flat — a 30° tilt visibly foreshortens them by comparison. */
+const ROTATE_Y = 14;
 /** Commit a swipe past 40px of travel or a flick at 450px/s. */
 const SWIPE_PX = 40;
 const SWIPE_V = 450;
 /** EASE_GLIDE as a CSS cubic-bezier — the index glide on the track. */
 const GLIDE_CSS = "cubic-bezier(0.4, 0, 0.15, 1)";
+/** Speech-bubble whitelist: per the user's follow-up request the mobile
+ *  bubble renders ONLY on cards 2 & 7 — the reference's own @coplin/@andrea
+ *  badges — and is removed from every other active card. Matched by handle,
+ *  not index, so it survives a reordering of CARDS. */
+const BUBBLE_HANDLES: ReadonlySet<string> = new Set(["@coplin", "@andrea"]);
 
 /**
  * Mobile (<640px) cover-flow carousel — the user-requested replacement for
@@ -72,7 +79,10 @@ export function ArtCoverFlow() {
   const active = CARDS[index];
 
   return (
-    <div className="relative hidden max-[641px]:block">
+    /* mt: 18px of air under the headline puts the bubble top ~24px below the
+       h1 (the reference's gap); pb: none — the subtitle's own mt-13 closes
+       the card→subtitle gap (~13px, per the reference image). */
+    <div className="relative mt-[18px] hidden overflow-x-clip pt-[46px] max-[641px]:block">
       <motion.div
         role="region"
         aria-roledescription="carousel"
@@ -100,11 +110,16 @@ export function ArtCoverFlow() {
         className="flex cursor-grab justify-center outline-none active:cursor-grabbing focus-visible:ring-2 focus-visible:ring-[#1458ED]/60"
       >
         {/* Track: card-sized box; its −index×65% glide keeps the active card
-            centred. overflow-x-clip on the wrapper absorbs the elastic drag
-            bleed so the document never scrolls sideways (clip does NOT
-            affect the vertical axis, so the tag above the cards is safe). */}
+            centred. The elastic drag bleed is absorbed by overflow-x-clip on
+            the WRAPPER (not here — clipping this box would hide the peeking
+            neighbours; clip also never affects the vertical axis, so the tag
+            above the cards is safe).
+            Sizing follows the user's mobile reference image: the active card
+            is 65vw of a 4:5 PORTRAIT frame (the artworks are ~4:5 at source —
+            art-7 renders uncropped like the comp), capped at 300px, with the
+            65% step leaving ~65px peeks at 393. */}
         <div
-          className="relative aspect-[184/192] w-[46vw] max-w-[200px] overflow-x-clip [perspective:900px]"
+          className="relative aspect-[4/5] w-[65vw] max-w-[300px]"
           style={{
             transform: `translateX(${-index * STEP_PCT}%)`,
             transition: reduce ? undefined : `transform 0.45s ${GLIDE_CSS}`,
@@ -117,7 +132,7 @@ export function ArtCoverFlow() {
             return (
               <div
                 key={card.src}
-                className="absolute left-1/2 top-0 h-full w-full"
+                className="absolute left-1/2 top-0 h-full w-full [perspective:900px]"
                 style={{
                   transform: `translateX(-50%) translateX(${k * STEP_PCT}%)`,
                   zIndex: isActive ? 10 : 0,
@@ -147,13 +162,16 @@ export function ArtCoverFlow() {
                     />
                   </figure>
 
-                  {isActive ? (
-                    /* Single dynamic speech bubble above the ACTIVE card
-                       (spec: absolute -top-10 left-1/2 -translate-x-1/2);
-                       text re-keys per handle so it updates on every swipe. */
+                  {isActive && BUBBLE_HANDLES.has(card.handle) ? (
+                    /* Speech bubble above the ACTIVE card — but only for the
+                       reference's two badges (cards 2 & 7); every other card
+                       renders bare (user request). Position: absolute
+                       -top-10 left-1/2 -translate-x-1/2; text re-keys per
+                       handle so it updates on every swipe. 32px tall / 16px
+                       type — the reference bubble's size. */
                     <div
                       aria-live="polite"
-                      className="absolute -top-10 left-1/2 z-20 h-[36px] -translate-x-1/2 whitespace-nowrap rounded-[20px] px-[14px] text-[18px] leading-[36px] tracking-[-0.5px] text-white"
+                      className="absolute -top-10 left-1/2 z-20 h-[32px] -translate-x-1/2 whitespace-nowrap rounded-[20px] px-[13px] text-[16px] leading-[32px] tracking-[-0.5px] text-white"
                       style={{ backgroundColor: card.tagBg }}
                     >
                       <motion.span
@@ -179,9 +197,11 @@ export function ArtCoverFlow() {
         </div>
       </motion.div>
 
-      {/* Page-level spacing: 46px of headroom for the bubble above the cards
-          (it hangs 40px up), 20px below so the subtitle keeps the fan-era
-          ~33px gap. Live-region text for assistive tech mirrors the tag. */}
+      {/* Page-level spacing: 46px of headroom above the cards for the bubble
+          (it hangs 40px up) — kept CONSTANT even on the five bare cards so
+          the card never jumps mid-swipe; none below, the subtitle's mt-13 is
+          the card→subtitle gap. The sr-only live region still announces the
+          active creator handle for every card. */}
       <p className="sr-only">
         {active.handle}, artwork {index + 1} of {CARDS.length}
       </p>

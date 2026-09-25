@@ -39,3 +39,20 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Internal UI recreation docs
+/docs/page-specs/
+/docs/references/
+/docs/progress.md
+/docs/visual-qa.md
+/docs/page-spec-template.md
+
+# Local AI agent instructions
+/AGENTS.md
+/app/*/AGENTS.md
+# Internal UI recreation docs
+/docs/
+
+# Local AI agent instructions
+/AGENTS.md
+/app/*/AGENTS.md
