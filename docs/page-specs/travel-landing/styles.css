@@ -34,9 +34,13 @@ body {
   background-size: cover;
 }
 
-/* At viewports close to the reference ratio the artwork is stretched to the
-   full box so the backdrop lines up pixel for pixel with the reference. */
-@media (min-aspect-ratio: 7/4) and (max-aspect-ratio: 11/6) {
+/* For laptop-shaped windows the artwork is stretched to the full box: the
+   backdrop then shares the composition's horizontal (or vertical) mapping
+   exactly and diverges only by the aspect-ratio delta, keeping the sky aligned
+   with the reference far better than `cover` (which drifts on both axes).
+   The band excludes tall/narrow windows and the mobile reflow (≤900px wide),
+   where a stretched sky would look wrong. */
+@media (min-aspect-ratio: 3/2) and (max-aspect-ratio: 21/10) {
   body {
     background-size: 100% 100%;
   }

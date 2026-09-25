@@ -1,3 +1,6 @@
+"use client";
+
+import { motion, useReducedMotion } from "framer-motion";
 import { nunitoSans } from "./fonts";
 import styles from "./travel-landing.module.css";
 
@@ -13,21 +16,67 @@ import styles from "./travel-landing.module.css";
  * The nav brand mark and the CTA glyph are original placeholders for the
  * reference's logo marks (see app/travel-landing/AGENTS.md).
  */
+
+/** Shared settle easing — matches the design's soft, rounded character. */
+const EASE = [0.22, 1, 0.36, 1] as [number, number, number, number];
+
+type EntranceProps = {
+  initial: { opacity: number; y?: number; scale?: number; rotate?: number } | false;
+  animate: { opacity: number; y?: number; scale?: number; rotate?: number };
+  transition?: { duration: number; delay: number; ease: typeof EASE };
+};
+
+/**
+ * Entrance choreography: everything rises a short distance into its measured
+ * reference position and settles there (no looping idle motion, so the
+ * settled state is pixel-identical to the reference). Under prefers-reduced
+ * motion every element renders at its final state without animating.
+ */
+function entrance(
+  reduce: boolean | null,
+  from: { y?: number; scale?: number; rotate?: number },
+  delay: number,
+  duration = 0.55,
+  /** Rest opacity — must match the element's design opacity (e.g. the
+      headline's fading lines) or an inline opacity would override it. */
+  restOpacity = 1
+): EntranceProps {
+  if (reduce) return { initial: false, animate: { opacity: restOpacity } };
+  return {
+    initial: { opacity: 0, ...from },
+    animate: {
+      opacity: restOpacity,
+      y: 0,
+      scale: 1,
+      ...(from.rotate !== undefined ? { rotate: from.rotate } : {}),
+    },
+    transition: { duration, delay, ease: EASE },
+  };
+}
+
 export function TravelLandingScreen() {
+  const reduce = useReducedMotion();
+
   return (
     <div className={`${styles.screen} ${nunitoSans.variable}`}>
       {/* Runs before the stage is parsed/painted (no hydration flash): scales
-          the 1199 × 666 reference frame to the real window on desktop. */}
+          the 1199 × 666 reference frame to the real window on desktop. The
+          value goes into a script-created <style> — never an attribute React
+          renders — so hydration stays clean. */}
       <script
         dangerouslySetInnerHTML={{
           __html:
-            "(function(){var d=document.documentElement;function f(){d.style.setProperty('--stage-zoom',(innerWidth>900)?Math.min(innerWidth/1199,innerHeight/666).toFixed(4):'1')}f();addEventListener('resize',f)})()",
+            "(function(){var s=document.createElement('style');document.head.appendChild(s);function f(){s.textContent=':root{--stage-zoom:'+(innerWidth>900?Math.min(innerWidth/1199,innerHeight/666).toFixed(4):'1')+'}'}f();addEventListener('resize',f)})()",
         }}
       />
       <div className={styles.stage}>
         {/* ── Navigation ─────────────────────────────────────────── */}
         <header className={styles["site-header"]}>
-          <nav className={styles["nav-pill"]} aria-label="Main">
+          <motion.nav
+            className={styles["nav-pill"]}
+            aria-label="Main"
+            {...entrance(reduce, { y: -10 }, 0, 0.5)}
+          >
             <a className={styles.brand} href="#">
               <span className={styles["brand-mark"]} aria-hidden="true">
                 <svg viewBox="0 0 18 19" focusable="false">
@@ -95,27 +144,39 @@ export function TravelLandingScreen() {
             <a className={styles["nav-login"]} href="#">
               Log in
             </a>
-          </nav>
+          </motion.nav>
         </header>
 
         {/* ── Headline ───────────────────────────────────────────── */}
         <h1 className={styles.headline}>
-          <span className={`${styles["headline-line"]} ${styles["headline-line--1"]}`}>
+          <motion.span
+            className={`${styles["headline-line"]} ${styles["headline-line--1"]}`}
+            {...entrance(reduce, { y: 16 }, 0.1)}
+          >
             Place for your
-          </span>
-          <span className={`${styles["headline-line"]} ${styles["headline-line--2"]}`}>
+          </motion.span>
+          <motion.span
+            className={`${styles["headline-line"]} ${styles["headline-line--2"]}`}
+            {...entrance(reduce, { y: 16 }, 0.18, 0.55, 0.87)}
+          >
             tickets, booking
-          </span>
-          <span className={`${styles["headline-line"]} ${styles["headline-line--3"]}`}>
+          </motion.span>
+          <motion.span
+            className={`${styles["headline-line"]} ${styles["headline-line--3"]}`}
+            {...entrance(reduce, { y: 16 }, 0.26, 0.55, 0.73)}
+          >
             and documents
-          </span>
+          </motion.span>
         </h1>
 
         {/* ── Overlapping ticket cards ───────────────────────────── */}
         <div className={styles["cards-wrap"]}>
           <div className={styles["cards-frame"]}>
             {/* Card A — feature copy */}
-            <article className={`${styles.card} ${styles["card--a"]}`}>
+            <motion.article
+              className={`${styles.card} ${styles["card--a"]}`}
+              {...entrance(reduce, { y: 40, rotate: -7.48 }, 0.34, 0.65)}
+            >
               <p className={styles["card-copy"]}>
                 <span>
                   Manage your flights, <span className={styles.emoji}>
@@ -165,10 +226,13 @@ export function TravelLandingScreen() {
                 </svg>
                 Add your stuff
               </span>
-            </article>
+            </motion.article>
 
             {/* Card Norway */}
-            <article className={`${styles.card} ${styles["card--nor"]}`}>
+            <motion.article
+              className={`${styles.card} ${styles["card--nor"]}`}
+              {...entrance(reduce, { y: 40, rotate: 11 }, 0.41, 0.65)}
+            >
               <span
                 className={`${styles["card-flag"]} ${styles["card-flag--no"]}`}
                 aria-hidden="true"
@@ -184,10 +248,13 @@ export function TravelLandingScreen() {
               <p className={styles["card-country"]}>Norway</p>
               <p className={styles["card-days"]}>12 Days</p>
               <p className={styles["card-date"]}>Thu, 5 Dec</p>
-            </article>
+            </motion.article>
 
             {/* Card black — flight status */}
-            <article className={`${styles.card} ${styles["card--blk"]}`}>
+            <motion.article
+              className={`${styles.card} ${styles["card--blk"]}`}
+              {...entrance(reduce, { y: 40, rotate: -8.6 }, 0.48, 0.65)}
+            >
               <span
                 className={`${styles["card-flag"]} ${styles["card-flag--us"]}`}
                 aria-hidden="true"
@@ -247,10 +314,13 @@ export function TravelLandingScreen() {
 
               <p className={styles["blk-days"]}>25 Days</p>
               <p className={styles["blk-date"]}>Fri, 18 Dec</p>
-            </article>
+            </motion.article>
 
             {/* Card C — route */}
-            <article className={`${styles.card} ${styles["card--c"]}`}>
+            <motion.article
+              className={`${styles.card} ${styles["card--c"]}`}
+              {...entrance(reduce, { y: 40, rotate: 13.34 }, 0.55, 0.65)}
+            >
               <p className={`${styles["c-row"]} ${styles["c-row--from"]}`}>
                 <span>New Jersey</span>
                 <svg
@@ -328,25 +398,40 @@ export function TravelLandingScreen() {
               <span className={`${styles["card-action"]} ${styles["card-action--c"]}`}>
                 Check it live
               </span>
-            </article>
+            </motion.article>
           </div>
         </div>
 
         {/* ── Sub copy ───────────────────────────────────────────── */}
         <p className={styles.subcopy}>
-          <span className={styles["subcopy-line--1"]}>
+          <motion.span
+            className={styles["subcopy-line--1"]}
+            {...entrance(reduce, { y: 10 }, 0.64, 0.5)}
+          >
             Everything related to travelling
-          </span>
-          <span className={styles["subcopy-line--2"]}>
+          </motion.span>
+          <motion.span
+            className={styles["subcopy-line--2"]}
+            {...entrance(reduce, { y: 10 }, 0.7, 0.5)}
+          >
             stored in one place. Never
-          </span>
-          <span className={styles["subcopy-line--3"]}>
+          </motion.span>
+          <motion.span
+            className={styles["subcopy-line--3"]}
+            {...entrance(reduce, { y: 10 }, 0.76, 0.5)}
+          >
             forget anything important.
-          </span>
+          </motion.span>
         </p>
 
         {/* ── Call to action ─────────────────────────────────────── */}
-        <a className={styles.cta} href="#">
+        <motion.a
+          className={styles.cta}
+          href="#"
+          {...entrance(reduce, { y: 12, scale: 0.96 }, 0.84, 0.55)}
+          whileHover={reduce ? undefined : { y: -1 }}
+          whileFocus={reduce ? undefined : { y: -1 }}
+        >
           <svg
             className={styles["cta-mark"]}
             viewBox="0 0 12 14"
@@ -357,7 +442,7 @@ export function TravelLandingScreen() {
             <circle cx="6" cy="11.4" r="1.15" fill="#ffffff" />
           </svg>
           <span>Download for IOS</span>
-        </a>
+        </motion.a>
       </div>
     </div>
   );
