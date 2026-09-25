@@ -112,7 +112,7 @@ export default function Home() {
                   <p className="text-[13px] leading-relaxed text-[var(--hub-muted)]">{screen.blurb}</p>
                 </div>
                 <div className="mt-auto flex items-center justify-between gap-3 pt-2">
-                  <span className="inline-flex items-center rounded-full bg-[var(--hub-ink)] px-3 py-1.5 text-xs font-medium tracking-wide text-white transition-colors group-hover:bg-black dark:bg-white dark:text-black">
+                  <span className="inline-flex items-center rounded-full bg-[var(--hub-accent)] px-3 py-1.5 text-xs font-medium tracking-wide text-[#0c0e12]">
                     Open
                   </span>
                   <span
