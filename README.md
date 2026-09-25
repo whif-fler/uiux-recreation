@@ -1,57 +1,67 @@
 # UI/UX Recreation
 
-Recreation of seven provided UI/UX reference designs as a single Next.js
-application. The supplied reference images are the source of truth: the goal is
-high visual fidelity and pixel-consistent recreation, not redesign.
+Recreation of seven provided UI/UX reference designs as a single Next.js application. The supplied reference designs are the source of truth, with the goal of achieving high visual fidelity and consistent recreation rather than redesigning the original concepts.
 
-Each screen is its own route on one deployment, implemented for desktop and
-mobile.
+Each screen is implemented as its own route within a single deployment, with responsive layouts for desktop and mobile.
 
 ## Live Demo
 
-- [Home](https://uiux-recreation.vercel.app/)
-- [Ride-Share Trip Details](https://uiux-recreation.vercel.app/ride-trip-details)
-- [Art Showcase](https://uiux-recreation.vercel.app/art-showcase)
-- [Travel App](https://uiux-recreation.vercel.app/travel-landing)
-- [Finance Dashboard](https://uiux-recreation.vercel.app/finance-landing)
-- [Real Estate Investment](https://uiux-recreation.vercel.app/real-estate-landing)
-- [Pricing Plans](https://uiux-recreation.vercel.app/pricing-plans)
-- [Developer Portfolio](https://uiux-recreation.vercel.app/developer-portfolio)
+* [Home](https://uiux-recreation.vercel.app/)
+* [Ride-Share Trip Details](https://uiux-recreation.vercel.app/ride-trip-details)
+* [Art Showcase](https://uiux-recreation.vercel.app/art-showcase)
+* [Travel App](https://uiux-recreation.vercel.app/travel-landing)
+* [Finance Dashboard](https://uiux-recreation.vercel.app/finance-landing)
+* [Real Estate Investment](https://uiux-recreation.vercel.app/real-estate-landing)
+* [Pricing Plans](https://uiux-recreation.vercel.app/pricing-plans)
+* [Developer Portfolio](https://uiux-recreation.vercel.app/developer-portfolio)
 
-## Tech stack
+## Tech Stack
 
-- Next.js
-- Tailwind CSS
-- Framer Motion
-- Lucide React
-- ESLint
+* Next.js
+* TypeScript
+* Tailwind CSS
+* Framer Motion
+* Lucide React
+* ESLint
 
 ## Routes
 
-| Route | Screen |
-| --- | --- |
-| `/ride-trip-details` | Ride-Share Trip Details |
-| `/art-showcase` | Art Showcase Landing |
-| `/travel-landing` | Travel App Landing |
-| `/finance-landing` | Finance Dashboard Landing |
+| Route                  | Screen                         |
+| ---------------------- | ------------------------------ |
+| `/ride-trip-details`   | Ride-Share Trip Details        |
+| `/art-showcase`        | Art Showcase Landing           |
+| `/travel-landing`      | Travel App Landing             |
+| `/finance-landing`     | Finance Dashboard Landing      |
 | `/real-estate-landing` | Real Estate Investment Landing |
-| `/pricing-plans` | Pricing Plans |
-| `/developer-portfolio` | Developer Portfolio Landing |
+| `/pricing-plans`       | Pricing Plans                  |
+| `/developer-portfolio` | Developer Portfolio Landing    |
 
-The seven routes are implemented one screen at a time from their provided reference designs.
+All seven screens are implemented within the same Next.js application and deployment.
 
-## Local development
+## Local Development
 
-Requirements: Node.js 20.9+ (Node 24 recommended).
+### Requirements
+
+* Node.js 20.9+
+* Node.js 24 recommended
+
+### Install dependencies
 
 ```bash
 npm install
+```
+
+### Start the development server
+
+```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open http://localhost:3000.
 
-## Production build
+## Production Build
+
+Run the production checks and build:
 
 ```bash
 npm run lint
@@ -59,48 +69,61 @@ npm run build
 npm start
 ```
 
-`npm run build` produces the optimized production build used for deployment.
+The production build is the same build used for deployment.
 
 ## Deployment
 
-The project is intended for deployment on [Vercel](https://vercel.com/) as a
-single Next.js app.
+The project is deployed as a single Next.js application on Vercel.
 
-Deployment URL: https://uiux-recreation.vercel.app
+**Deployment URL:** https://uiux-recreation.vercel.app
 
-## Project structure
+## Project Structure
 
-```
+```text
 app/
-  ride-trip-details/    page.tsx, AGENTS.md
-  art-showcase/         page.tsx, AGENTS.md
-  travel-landing/       page.tsx, AGENTS.md
-  finance-landing/      page.tsx, AGENTS.md
-  real-estate-landing/  page.tsx, AGENTS.md
-  pricing-plans/        page.tsx, AGENTS.md
-  developer-portfolio/  page.tsx, AGENTS.md
-  layout.tsx            root layout
-  globals.css           global styles
+├── ride-trip-details/
+├── art-showcase/
+├── travel-landing/
+├── finance-landing/
+├── real-estate-landing/
+├── pricing-plans/
+├── developer-portfolio/
+├── _components/
+├── layout.tsx
+├── globals.css
+└── page.tsx
+
 components/
-  shared/               shared components (added when real reuse exists)
-docs/
-  assignment.md         assignment and milestone requirements
-  progress.md           milestone tracking
-  visual-qa.md          reusable visual QA checklist
-  page-spec-template.md template for per-page specifications
-public/                 static assets
-AGENTS.md               project instruction set for contributors and AI agents
-README.md               this file
+└── shared/
+
+public/
+└── static assets
+
+README.md
+.gitignore
+package.json
+package-lock.json
+next.config.ts
+tsconfig.json
+eslint.config.mjs
+postcss.config.mjs
 ```
 
-## Assignment requirements (summary)
+## Assignment Requirements
 
-Seven screens must be recreated from reference designs, each with:
+The project recreates seven provided UI/UX reference designs.
 
-- a dedicated route on a single public deployment
-- a desktop layout and a mobile layout (both compulsory)
-- accurate composition, spacing, typography, color, components, and motion
+Each screen includes:
 
-The assignment is worth 100 points across 8 milestones: repository and live
-deployment (16 points), plus 12 points for each of the seven screens. The full
-breakdown lives in [`docs/assignment.md`](docs/assignment.md).
+* A dedicated route within one public deployment
+* Responsive desktop and mobile layouts
+* High-fidelity recreation of the reference composition
+* Matching typography, spacing, colors, components, and visual details
+* Motion and interaction where appropriate
+
+The assignment is evaluated across eight milestones:
+
+* Repository and live deployment
+* Seven individual screen recreations
+
+Each screen contributes to the overall visual recreation score, with emphasis on design understanding, visual accuracy, responsive behavior, and motion.
