@@ -31,11 +31,18 @@ body {
   background-image: url("assets/background.jpeg");
   background-position: center top;
   background-repeat: no-repeat;
-  /* `cover` by default; the fit script in the head swaps in `100% 100%` only
-     for laptop-shaped windows at ≥1199px, where a full stretch keeps the sky
-     aligned with the scaled composition. No JS → plain cover (correct for
-     the mobile reflow). */
-  background-size: var(--screen-bg-size, cover);
+  background-size: cover;
+}
+
+/* Laptop-shaped windows at ≥1199px: the artwork is stretched to the full
+   box, so the backdrop shares the composition's mapping exactly and diverges
+   only by the aspect-ratio delta (better than `cover`, which drifts on both
+   axes). Everywhere else — tall/narrow windows, native 901–1198px, the mobile
+   reflow — `cover` from the rule above is correct. */
+@media (min-width: 1199px) and (min-aspect-ratio: 3/2) and (max-aspect-ratio: 21/10) {
+  body {
+    background-size: 100% 100%;
+  }
 }
 
 h1,
@@ -60,18 +67,24 @@ svg {
 
 /* ---------------------------------------------------------------- stage -- */
 /* The stage is the reference frame (1199 × 666). At ≥1199px it is uniformly
-   zoomed to fill the real window — `min(vw/1199, vh/666)` set by the inline
-   fit script — so the composition keeps the reference's exact proportions at
-   any laptop resolution (1199×666 → zoom 1, 1920×1081 → zoom ≈ 1.601).
+   zoomed to fill the real window — `min(vw/1199, vh/666)` evaluated directly
+   in CSS, so the fit exists at first paint and is re-evaluated by the browser
+   itself on resize (no inline script needed).
    Between 901–1198px the zoom is 1: the layout stays at native size and only
-   narrows. At ≤900px the reflow below takes over. */
+   narrows. At ≤900px the reflow below takes over. Browsers without calc()
+   length division keep zoom 1 — native and centred, still correct. */
 .stage {
   position: relative;
   width: 100%;
   max-width: 1199px;
   margin: 0 auto;
   padding: 14px 0 41px;
-  zoom: var(--stage-zoom, 1);
+}
+
+@media (min-width: 1199px) {
+  .stage {
+    zoom: min(calc(100vw / 1199px), calc(100vh / 666px));
+  }
 }
 
 /* ------------------------------------------------------------------ nav -- */
